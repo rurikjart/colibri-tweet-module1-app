@@ -17,5 +17,6 @@
     <string name="Name">Имя</string>
     <string name="Nik">Ник</string>
     <string name="description">Описание</string>
+    <string name="todo">TODO</string>
 
 </resources>
