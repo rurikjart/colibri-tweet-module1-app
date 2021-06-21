@@ -36,4 +36,10 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // latest picasso lib
+  //  implementation 'com.squareup.picasso:picasso:2.71828'
+    // work picasso lib
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
