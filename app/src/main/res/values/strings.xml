@@ -21,5 +21,7 @@
 
 
     <string name="fa_map_marker" translatable="false">&#xf041;</string>
+    <string name="fa_heart_o" translatable="false">&#xf08a;</string>
+    <string name="fa_retweet" translatable="false">&#xf079;</string>
 
 </resources>
