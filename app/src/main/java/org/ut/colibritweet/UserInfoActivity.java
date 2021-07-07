@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.ut.colibritweet.pojo.User;
+
 public class UserInfoActivity extends AppCompatActivity {
 
     private ImageView userImageView;
@@ -32,21 +34,45 @@ public class UserInfoActivity extends AppCompatActivity {
         followersCountTextView = findViewById(R.id.followers_count_text_view);
 
 
-        displayUserInfo();
+        loadUserInfo();
     }
 
-    private void displayUserInfo() {
+    private void loadUserInfo() {
+        User user = getUser();
+        displayUserInfo(user);
+    }
+
+    private void displayUserInfo(User user) {
         // ver 2.7
         //  Picasso.get().load("http://i.imgur.com/DvpvklR.png").into(userImageView);
 
         // ver 2.5.2
-        Picasso.with(this).load("http://wrestlingua.com/uploads/posts/2018-10/1540027375_davidtaylorfinalx18.jpg").into(userImageView);
-        nameTextView.setText("DevColibri");
-        nickTextView.setText("@devcolibri");
-        descriptionTextView.setText("Sample description");
-        locationTextView.setText("USA");
-        followingCountTextView.setText("42");
-        followersCountTextView.setText("42");
+        Picasso.with(this).load(user.getImageUrl()).into(userImageView);
+
+        nameTextView.setText(user.getName());
+        nickTextView.setText(user.getNick());
+        
+        descriptionTextView.setText(user.getDescription());
+        locationTextView.setText(user.getLocation());
+
+        String followingCount = String.valueOf(user.getFollowingCount());
+        followingCountTextView.setText(followingCount);
+
+        String followersCount = String.valueOf(user.getFollowersCount());
+        followersCountTextView.setText(followersCount);
+    }
+
+    private User getUser() {
+        return new User(
+                1L,
+                "http://wrestlingua.com/uploads/posts/2018-10/1540027375_davidtaylorfinalx18.jpg",
+                "DevColibri",
+                "devcolibri",
+                "Sample description",
+                "USA",
+                42,
+                42
+        );
     }
 
 }
