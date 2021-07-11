@@ -51,7 +51,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         nameTextView.setText(user.getName());
         nickTextView.setText(user.getNick());
-        
+
         descriptionTextView.setText(user.getDescription());
         locationTextView.setText(user.getLocation());
 
