@@ -42,4 +42,8 @@ dependencies {
   //  implementation 'com.squareup.picasso:picasso:2.71828'
     // work picasso lib
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+
+    //noinspection GradleCompatible
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }
