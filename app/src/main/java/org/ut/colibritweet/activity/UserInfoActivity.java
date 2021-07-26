@@ -1,4 +1,4 @@
-package org.ut.colibritweet;
+package org.ut.colibritweet.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.TweetAdapter;
 import org.ut.colibritweet.pojo.Tweet;
 import org.ut.colibritweet.pojo.User;
