@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import org.ut.colibritweet.R;
+import org.ut.colibritweet.adapter.UsersAdapter;
 import org.ut.colibritweet.pojo.User;
 
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.Collection;
 public class SearchUsersActivity extends AppCompatActivity {
 
     private RecyclerView usersRecyclerView;
-
+    private UsersAdapter userAdapter;
 
 
     @Override
@@ -24,11 +25,23 @@ public class SearchUsersActivity extends AppCompatActivity {
 
 
         initRecyclerView();
+        searchUsers();
     }
+
+
 
     private void initRecyclerView() {
         usersRecyclerView = findViewById(R.id.users_recycler_view);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        userAdapter = new UsersAdapter();
+        usersRecyclerView.setAdapter(userAdapter);
+    }
+
+    private void searchUsers() {
+        Collection<User> users = getUsers();
+        userAdapter.setItems(users);
     }
 
     private Collection<User> getUsers() {
