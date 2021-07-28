@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.UsersAdapter;
@@ -34,8 +35,15 @@ public class SearchUsersActivity extends AppCompatActivity {
         usersRecyclerView = findViewById(R.id.users_recycler_view);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        UsersAdapter.OnUserClickListener onUserClickListener = new UsersAdapter.OnUserClickListener() {
+            @Override
+            public void onUserClick(User user) {
+                Toast.makeText(SearchUsersActivity.this, "user " + user.getName(), Toast.LENGTH_SHORT).show();
+            }
+        };
 
-        userAdapter = new UsersAdapter();
+
+        userAdapter = new UsersAdapter(onUserClickListener);
         usersRecyclerView.setAdapter(userAdapter);
     }
 

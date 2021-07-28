@@ -21,6 +21,12 @@ import java.util.List;
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
     private List<User> userList = new ArrayList<>();
 
+    private OnUserClickListener onUserClickListener;
+
+    public UsersAdapter(OnUserClickListener onUserClickListener) {
+        this.onUserClickListener = onUserClickListener;
+    }
+
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -58,6 +64,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             userImageView = itemView.findViewById(R.id.profile_image_view);
             nameTextView = itemView.findViewById(R.id.user_name_text_view);
             nickTextView = itemView.findViewById(R.id.user_nick_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    User user = userList.get(getLayoutPosition());
+                    onUserClickListener.onUserClick(user);
+                }
+            });
         }
 
         public void bind(User user) {
@@ -65,5 +79,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             nickTextView.setText(user.getNick());
             Picasso.with(itemView.getContext()).load(user.getImageUrl()).into(userImageView);
         }
+
+
+
+    }
+
+    //интерфейс обеспечивающий работу клика по элементу списка поиска пользователей
+    public  interface OnUserClickListener {
+        void onUserClick(User user);
     }
 }

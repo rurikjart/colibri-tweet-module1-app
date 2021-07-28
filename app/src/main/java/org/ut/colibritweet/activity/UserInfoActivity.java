@@ -19,6 +19,8 @@ import java.util.Collection;
 
 public class UserInfoActivity extends AppCompatActivity {
 
+    public static final String USER_ID = "user_Id";
+
     private ImageView userImageView;
     private TextView nameTextView;
     private TextView  nickTextView;
