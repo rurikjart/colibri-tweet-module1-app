@@ -1,5 +1,6 @@
 package org.ut.colibritweet.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,10 @@ public class SearchUsersActivity extends AppCompatActivity {
         UsersAdapter.OnUserClickListener onUserClickListener = new UsersAdapter.OnUserClickListener() {
             @Override
             public void onUserClick(User user) {
-                Toast.makeText(SearchUsersActivity.this, "user " + user.getName(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(SearchUsersActivity.this, "user " + user.getName(), Toast.LENGTH_SHORT).show(); // сначало сообщаем потом открываем октивити
+                Intent intent = new Intent(SearchUsersActivity.this, UserInfoActivity.class);
+                intent.putExtra(UserInfoActivity.USER_ID, user.getId());
+                startActivity(intent);
             }
         };
 

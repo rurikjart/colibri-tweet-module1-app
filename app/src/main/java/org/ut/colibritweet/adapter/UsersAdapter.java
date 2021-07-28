@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
-    private List<User> userList = new ArrayList<>();
 
+    private List<User> userList = new ArrayList<>();
     private OnUserClickListener onUserClickListener;
 
     public UsersAdapter(OnUserClickListener onUserClickListener) {
@@ -36,7 +36,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
-        holder.bind(userList.get(position));
+        User user = userList.get(position);
+        holder.bind(user);
     }
 
     public void setItems(Collection<User> users) {
