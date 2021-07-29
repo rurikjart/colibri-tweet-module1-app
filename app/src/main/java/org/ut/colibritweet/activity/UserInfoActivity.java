@@ -1,9 +1,14 @@
 package org.ut.colibritweet.activity;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +39,8 @@ public class UserInfoActivity extends AppCompatActivity {
     //адаптер заполнения списка RecyclerView
     private TweetAdapter tweetAdapter;
 
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +55,8 @@ public class UserInfoActivity extends AppCompatActivity {
         followingCountTextView = findViewById(R.id.following_count_text_view);
         followersCountTextView = findViewById(R.id.followers_count_text_view);
 
+        initUserToolbar();
+
         initRecyclerView();
         loadUserInfo();
 
@@ -60,6 +69,30 @@ public class UserInfoActivity extends AppCompatActivity {
        loadTweets(); 
        
     }
+
+    // активация кнопки поиска на тулбаре текущего активити
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.user_info_menu, menu);
+        return true;
+    }
+
+    // вызов активности поиска пользователей
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.action_search) {
+            Intent intent = new Intent(this, SearchUsersActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
+    }
+
+    private void initUserToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
 
     private void loadTweets() {
         Collection<Tweet> tweets = getTweets();
@@ -113,6 +146,9 @@ public class UserInfoActivity extends AppCompatActivity {
 
         String followersCount = String.valueOf(user.getFollowersCount());
         followersCountTextView.setText(followersCount);
+
+        //отображение в заголовке пользоватеьского тулбара наименование пользователя
+        getSupportActionBar().setTitle(user.getName());
     }
 
     private User getUser() {

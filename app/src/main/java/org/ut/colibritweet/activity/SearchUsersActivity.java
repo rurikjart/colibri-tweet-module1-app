@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.UsersAdapter;
@@ -20,6 +19,7 @@ public class SearchUsersActivity extends AppCompatActivity {
     private UsersAdapter userAdapter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +29,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         initRecyclerView();
         searchUsers();
     }
+
 
 
 
