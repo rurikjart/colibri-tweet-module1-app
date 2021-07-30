@@ -115,6 +115,8 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     private void searchUsers() {
         Collection<User> users = getUsers();
+        //fix Проблема повторения элементов в списке. просто затираем и заполняем заново
+        userAdapter.clearItems();
         userAdapter.setItems(users);
     }
 
