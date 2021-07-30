@@ -43,7 +43,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
         userImageView = findViewById(R.id.user_image_view);

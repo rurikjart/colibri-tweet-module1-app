@@ -5,6 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.UsersAdapter;
@@ -17,8 +25,23 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     private RecyclerView usersRecyclerView;
     private UsersAdapter userAdapter;
+    private Toolbar toolbar;
+    private EditText queryEditText;
+    private Button searchButton;
+
+    // обрабатываем нажатие кнопки домой
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return  true;
+        }
 
 
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +50,46 @@ public class SearchUsersActivity extends AppCompatActivity {
 
 
         initRecyclerView();
+
+        toolbar = findViewById(R.id.toolbar);
+        queryEditText = toolbar.findViewById(R.id.query_edit_text);
+        searchButton = toolbar.findViewById(R.id.search_button);
+
+        //определяем кнопку домой в тулбаре
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
+
         searchUsers();
+
+        // назначаем слушатель на элементу поиска в экранной клавиатуре
+
+        queryEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchUsers();
+                    return  true;
+                }
+                return false;
+            }
+        });
+
+
+
     }
+
+    //обработка клика по кнопке поиска в тулбаре
+
+    public  void onClickSearchButton(View view) {
+        searchUsers();
+
+    }
+
+
 
 
 
