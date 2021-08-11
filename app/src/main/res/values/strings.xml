@@ -25,4 +25,10 @@
     <string name="fa_retweet" translatable="false">&#xf079;</string>
     <string name="ion_search" translatable="false">&#xf2f5;</string>
 
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">uRJ8JebdrBVByRIUQoJgXOEOu</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">O7V535sxWcXPRXG9PFwg6y54c3T1t83oLbXTq0EVrRsrBoa4PL</string>
+
+
+
 </resources>
