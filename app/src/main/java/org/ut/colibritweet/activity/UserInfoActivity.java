@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -17,9 +18,11 @@ import com.squareup.picasso.Picasso;
 
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.TweetAdapter;
+import org.ut.colibritweet.network.HttpClient;
 import org.ut.colibritweet.pojo.Tweet;
 import org.ut.colibritweet.pojo.User;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -39,6 +42,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
     //адаптер заполнения списка RecyclerView
     private TweetAdapter tweetAdapter;
+
+    private HttpClient httpClient;
 
     private Toolbar toolbar;
 
@@ -63,7 +68,10 @@ public class UserInfoActivity extends AppCompatActivity {
         initUserToolbar();
 
         initRecyclerView();
-        loadUserInfo();
+
+        httpClient = new HttpClient();
+
+        loadUserInfo(userId);
 
 
 
@@ -128,9 +136,24 @@ public class UserInfoActivity extends AppCompatActivity {
         tweetsRecyclerView.setAdapter(tweetAdapter);
     }
 
-    private void loadUserInfo() {
-        User user = getUser();
-        displayUserInfo(user);
+    private void loadUserInfo(final long userId)  {
+      //  User user = getUser();
+      //  displayUserInfo(user);
+
+        Runnable readUserRunnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String userInfo =  httpClient.readUserInfo(userId);
+                    Log.d("HttpTest", userInfo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+      new Thread(readUserRunnable).start();
+
     }
 
     private void displayUserInfo(User user) {
