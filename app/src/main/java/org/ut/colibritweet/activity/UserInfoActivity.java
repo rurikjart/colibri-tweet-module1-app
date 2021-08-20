@@ -144,8 +144,19 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
+
+
                     String userInfo =  httpClient.readUserInfo(userId);
-                    Log.d("HttpTest", userInfo);
+                  //  Log.d("HttpTest", userInfo);
+                    Runnable showResultRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                                Toast.makeText(UserInfoActivity.this, userInfo, Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                    runOnUiThread(showResultRunnable);
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
