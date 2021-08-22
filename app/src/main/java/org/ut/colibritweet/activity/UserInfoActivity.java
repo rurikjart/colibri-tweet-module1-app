@@ -224,6 +224,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
        protected void onPostExecute(String result) {
           //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
+           Log.d("HttpTest", result);
        }
 
     }
