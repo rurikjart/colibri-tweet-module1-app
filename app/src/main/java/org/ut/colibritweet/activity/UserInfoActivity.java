@@ -54,8 +54,8 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         long userId = getIntent().getLongExtra(USER_ID, -1);
-        Toast.makeText(this, "UserId = " + userId, Toast.LENGTH_LONG).show();
-
+       // Toast.makeText(this, "UserId = " + userId, Toast.LENGTH_LONG).show();
+        Log.d("HttpTest", "UserId = " + String.valueOf(userId));
 
         userImageView = findViewById(R.id.user_image_view);
         userImageView = findViewById(R.id.user_image_view);
