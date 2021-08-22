@@ -1,6 +1,7 @@
 package org.ut.colibritweet.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -137,10 +138,12 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void loadUserInfo(final long userId)  {
-      //  User user = getUser();
-      //  displayUserInfo(user);
+       //1
+       //  User user = getUser();
+       //  displayUserInfo(user);
 
-        Runnable readUserRunnable = new Runnable() {
+        //2
+       /* Runnable readUserRunnable = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -163,7 +166,9 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         };
 
-      new Thread(readUserRunnable).start();
+      new Thread(readUserRunnable).start(); */
+
+      new UserInfoAsyncTask().execute(userId);
 
     }
 
@@ -202,7 +207,25 @@ public class UserInfoActivity extends AppCompatActivity {
                 42
         );
     }
-    
-    
+
+    private class UserInfoAsyncTask extends AsyncTask<Long, Intent, String> {
+
+        //отправляем на фоновое исполнение процесс
+        protected  String doInBackground(Long... ids) {
+            try {
+                // достаем userId, который передли в метод execute
+                Long userId = ids[0];
+                return httpClient.readUserInfo(userId);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return  null;
+            }
+        }
+
+       protected void onPostExecute(String result) {
+          //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
+       }
+
+    }
 
 }
