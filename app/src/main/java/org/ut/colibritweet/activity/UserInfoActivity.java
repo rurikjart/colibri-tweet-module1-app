@@ -13,10 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.TweetAdapter;
 import org.ut.colibritweet.network.HttpClient;
@@ -208,23 +208,24 @@ public class UserInfoActivity extends AppCompatActivity {
         );
     }
 
-    private class UserInfoAsyncTask extends AsyncTask<Long, Intent, String> {
+    private class UserInfoAsyncTask extends AsyncTask<Long, Intent, User> {
 
         //отправляем на фоновое исполнение процесс
-        protected  String doInBackground(Long... ids) {
+        protected User doInBackground(Long... ids) {
             try {
                 // достаем userId, который передли в метод execute
                 Long userId = ids[0];
                 return httpClient.readUserInfo(userId);
-            } catch (IOException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 return  null;
             }
         }
 
-       protected void onPostExecute(String result) {
+       protected void onPostExecute(User result) {
           //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
-           Log.d("HttpTest", result);
+          // Log.d("HttpTest", result);
+           displayUserInfo(result);
        }
 
     }
