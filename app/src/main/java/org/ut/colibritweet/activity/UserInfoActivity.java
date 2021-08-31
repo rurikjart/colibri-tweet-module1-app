@@ -230,4 +230,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
     }
 
+    //
+    private class TweetsAsyncTask extends AsyncTask<Long, Integer, Collection<Tweet>> {
+
+
+
+
+    }
+
 }
