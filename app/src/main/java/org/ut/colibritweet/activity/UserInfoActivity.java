@@ -33,9 +33,9 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private ImageView userImageView;
     private TextView nameTextView;
-    private TextView  nickTextView;
-    private TextView  descriptionTextView;
-    private TextView  locationTextView;
+    private TextView nickTextView;
+    private TextView descriptionTextView;
+    private TextView locationTextView;
     private TextView followingCountTextView;
     private TextView followersCountTextView;
 
@@ -54,7 +54,7 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         long userId = getIntent().getLongExtra(USER_ID, -1);
-       // Toast.makeText(this, "UserId = " + userId, Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, "UserId = " + userId, Toast.LENGTH_LONG).show();
         Log.d("HttpTest", "UserId = " + String.valueOf(userId));
 
         userImageView = findViewById(R.id.user_image_view);
@@ -75,14 +75,18 @@ public class UserInfoActivity extends AppCompatActivity {
         loadUserInfo(userId);
 
 
-
         //устанавливаем менеджер отображения
-       tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-       
-       //Грузим объекты заглушки
-       loadTweets(); 
-       
+        tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Грузим объекты заглушки для твиттов
+        loadTweets(userId);
+
     }
+
+    private void loadTweets(long userId) {
+        new TweetsAsyncTask().execute(userId);
+    }
+
 
     // активация кнопки поиска на тулбаре текущего активити
     @Override
@@ -94,7 +98,7 @@ public class UserInfoActivity extends AppCompatActivity {
     // вызов активности поиска пользователей
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.action_search) {
+        if (item.getItemId() == R.id.action_search) {
             Intent intent = new Intent(this, SearchUsersActivity.class);
             startActivity(intent);
         }
@@ -113,7 +117,7 @@ public class UserInfoActivity extends AppCompatActivity {
         tweetAdapter.setItems(tweets);
     }
 
-    private Collection<Tweet> getTweets() {
+  /*  private Collection<Tweet> getTweets() {
 
         return Arrays.asList(
                 new Tweet(getUser(), 1L, "Thu Dec 13 07:31:08 +0000 2017", "Очень длинное описание твита 1",
@@ -126,21 +130,21 @@ public class UserInfoActivity extends AppCompatActivity {
                         6L, 6L, "https://www.w3schools.com/css/img_mountains.jpg")
         );
 
-    }
+    } */
 
     private void initRecyclerView() {
         // инициализируем  элемент
         tweetsRecyclerView = findViewById(R.id.tweets_recycler_view);
-        
+
         //
         tweetAdapter = new TweetAdapter();
         tweetsRecyclerView.setAdapter(tweetAdapter);
     }
 
-    private void loadUserInfo(final long userId)  {
-       //1
-       //  User user = getUser();
-       //  displayUserInfo(user);
+    private void loadUserInfo(final long userId) {
+        //1
+        //  User user = getUser();
+        //  displayUserInfo(user);
 
         //2
        /* Runnable readUserRunnable = new Runnable() {
@@ -168,7 +172,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
       new Thread(readUserRunnable).start(); */
 
-      new UserInfoAsyncTask().execute(userId);
+        new UserInfoAsyncTask().execute(userId);
 
     }
 
@@ -195,7 +199,7 @@ public class UserInfoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(user.getName());
     }
 
-    private User getUser() {
+  /*  private User getUser() {
         return new User(
                 1L,
                 "http://wrestlingua.com/uploads/posts/2018-10/1540027375_davidtaylorfinalx18.jpg",
@@ -206,7 +210,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 42,
                 42
         );
-    }
+    }*/
 
     private class UserInfoAsyncTask extends AsyncTask<Long, Intent, User> {
 
@@ -218,15 +222,15 @@ public class UserInfoActivity extends AppCompatActivity {
                 return httpClient.readUserInfo(userId);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                return  null;
+                return null;
             }
         }
 
-       protected void onPostExecute(User result) {
-          //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
-          // Log.d("HttpTest", result);
-           displayUserInfo(result);
-       }
+        protected void onPostExecute(User result) {
+            //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
+            // Log.d("HttpTest", result);
+            displayUserInfo(result);
+        }
 
     }
 
@@ -234,8 +238,26 @@ public class UserInfoActivity extends AppCompatActivity {
     private class TweetsAsyncTask extends AsyncTask<Long, Integer, Collection<Tweet>> {
 
 
+        protected Collection<Tweet> doInBackground(Long... ids) {
+
+            try {
+                Long userId = ids[0];
+
+                return httpClient.readTweets(userId);
 
 
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+
+        protected void onPostExecute(Collection<Tweet> tweets) {
+            tweetAdapter.setItems(tweets);
+        }
     }
-
 }
