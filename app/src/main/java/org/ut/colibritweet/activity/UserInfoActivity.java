@@ -1,5 +1,6 @@
 package org.ut.colibritweet.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -71,21 +72,12 @@ public class UserInfoActivity extends AppCompatActivity {
         initRecyclerView();
 
         httpClient = new HttpClient();
-
         loadUserInfo(userId);
-
-
-        //устанавливаем менеджер отображения
-        tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //Грузим объекты заглушки для твиттов
         loadTweets(userId);
 
     }
 
-    private void loadTweets(long userId) {
-        new TweetsAsyncTask().execute(userId);
-    }
+
 
 
     // активация кнопки поиска на тулбаре текущего активити
@@ -114,10 +106,15 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void loadTweets() {
         Collection<Tweet> tweets = getTweets();
+
         tweetAdapter.setItems(tweets);
     }
 
-  /*  private Collection<Tweet> getTweets() {
+    private void loadTweets(long userId) {
+        new TweetsAsyncTask().execute(userId);
+    }
+
+    private Collection<Tweet> getTweets() {
 
         return Arrays.asList(
                 new Tweet(getUser(), 1L, "Thu Dec 13 07:31:08 +0000 2017", "Очень длинное описание твита 1",
@@ -130,13 +127,11 @@ public class UserInfoActivity extends AppCompatActivity {
                         6L, 6L, "https://www.w3schools.com/css/img_mountains.jpg")
         );
 
-    } */
+    }
 
     private void initRecyclerView() {
-        // инициализируем  элемент
         tweetsRecyclerView = findViewById(R.id.tweets_recycler_view);
-
-        //
+        tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         tweetAdapter = new TweetAdapter();
         tweetsRecyclerView.setAdapter(tweetAdapter);
     }
@@ -199,7 +194,7 @@ public class UserInfoActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(user.getName());
     }
 
-  /*  private User getUser() {
+    private User getUser() {
         return new User(
                 1L,
                 "http://wrestlingua.com/uploads/posts/2018-10/1540027375_davidtaylorfinalx18.jpg",
@@ -210,8 +205,8 @@ public class UserInfoActivity extends AppCompatActivity {
                 42,
                 42
         );
-    }*/
-
+    }
+    @SuppressLint("StaticFieldLeak")
     private class UserInfoAsyncTask extends AsyncTask<Long, Intent, User> {
 
         //отправляем на фоновое исполнение процесс
@@ -235,6 +230,7 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     //
+    @SuppressLint("StaticFieldLeak")
     private class TweetsAsyncTask extends AsyncTask<Long, Integer, Collection<Tweet>> {
 
 
@@ -246,10 +242,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 return httpClient.readTweets(userId);
 
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 return null;
             }
