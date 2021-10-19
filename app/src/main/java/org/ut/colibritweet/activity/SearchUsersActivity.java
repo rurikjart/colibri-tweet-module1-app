@@ -1,6 +1,8 @@
 package org.ut.colibritweet.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,21 +15,27 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.ut.colibritweet.R;
 import org.ut.colibritweet.adapter.UsersAdapter;
+import org.ut.colibritweet.network.HttpClient;
 import org.ut.colibritweet.pojo.User;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
 public class SearchUsersActivity extends AppCompatActivity {
 
     private RecyclerView usersRecyclerView;
-    private UsersAdapter userAdapter;
+    private UsersAdapter usersAdapter;
     private Toolbar toolbar;
     private EditText queryEditText;
     private Button searchButton;
+
+    private HttpClient httpClient;
 
     // обрабатываем нажатие кнопки домой
     @Override
@@ -58,9 +66,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         //определяем кнопку домой в тулбаре
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
+        httpClient = new HttpClient();
 
 
         searchUsers();
@@ -109,15 +115,38 @@ public class SearchUsersActivity extends AppCompatActivity {
         };
 
 
-        userAdapter = new UsersAdapter(onUserClickListener);
-        usersRecyclerView.setAdapter(userAdapter);
+        usersAdapter = new UsersAdapter(onUserClickListener);
+        usersRecyclerView.setAdapter(usersAdapter);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private void searchUsers() {
-        Collection<User> users = getUsers();
-        //fix Проблема повторения элементов в списке. просто затираем и заполняем заново
-        userAdapter.clearItems();
-        userAdapter.setItems(users);
+        final String query = queryEditText.getText().toString();
+        if(query.length() == 0) {
+            Toast.makeText(SearchUsersActivity.this, R.string.not_enough_symbols_msg, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new UsersAsyncTask().execute(query);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class UsersAsyncTask extends AsyncTask<String, Integer, Collection<User>> {
+        @Override
+        protected Collection<User> doInBackground(String... params) {
+            String query = params[0];
+            try {
+                return httpClient.readUsers(query);
+            } catch (IOException | JSONException e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Collection<User> users) {
+            usersAdapter.clearItems();
+            usersAdapter.setItems(users);
+        }
     }
 
     private Collection<User> getUsers() {
@@ -145,4 +174,6 @@ public class SearchUsersActivity extends AppCompatActivity {
                 )
         );
     }
+
+
 }

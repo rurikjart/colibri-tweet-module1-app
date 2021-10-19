@@ -24,11 +24,18 @@ public class HttpClient {
 
     private final JsonParser jsonParser;
 
-    public HttpClient() {
+    public HttpClient(){
         jsonParser = new JsonParser();
     }
 
-// запрос текущих твитов
+    public Collection<User> readUsers(String query) throws IOException, JSONException {
+        String requestUrl = "https://api.twitter.com/1.1/users/search.json?q=" + query;
+        String encodedUrl = requestUrl.replaceAll(" ", "%20");
+        String response = getResponse(encodedUrl);
+        Collection<User> users = jsonParser.getUsers(response);
+        return users;
+    }
+
     public Collection<Tweet> readTweets(long userId) throws IOException, JSONException {
         String requestUrl = "https://api.twitter.com/1.1/statuses/user_timeline.json?user_id=" + userId + EXTENDED_MODE;
         String response = getResponse(requestUrl);
@@ -36,13 +43,13 @@ public class HttpClient {
         return tweets;
     }
 
-    //запрос данных пользователя
     public User readUserInfo(long userId) throws IOException, JSONException {
         String requestUrl = "https://api.twitter.com/1.1/users/show.json?user_id=" + userId;
         String response = getResponse(requestUrl);
         User user = jsonParser.getUser(response);
         return user;
     }
+
 
     private String getResponse(String requestUrl) throws IOException {
         URL url = new URL(requestUrl);
@@ -64,7 +71,6 @@ public class HttpClient {
 
         return convertStreamToString(in);
     }
-
 
 
     private String convertStreamToString(InputStream stream) throws IOException {

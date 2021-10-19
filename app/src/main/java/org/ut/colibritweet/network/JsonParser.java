@@ -11,6 +11,19 @@ import java.util.Collection;
 
 public class JsonParser {
 
+    public Collection<User> getUsers(String response) throws JSONException {
+        JSONArray jsonArray = new JSONArray(response);
+        Collection<User> usersResult = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject userJson = jsonArray.getJSONObject(i);
+            User user = getUser(userJson);
+            usersResult.add(user);
+        }
+
+        return usersResult;
+
+    }
 
     public User getUser(String response) throws JSONException {
         JSONObject userJson = new JSONObject(response);
@@ -29,7 +42,6 @@ public class JsonParser {
 
         return new User(id, imageUrl, name, nick, description, location, followingCount, followersCount);
     }
-
 
     public Collection<Tweet> getTweets(String response) throws JSONException {
         JSONArray jsonArray = new JSONArray(response);
@@ -53,7 +65,6 @@ public class JsonParser {
         }
 
         return tweetsResult;
-
     }
 
     private String getTweetImageUrl(JSONObject tweetJson) throws JSONException {
