@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -224,7 +225,19 @@ public class UserInfoActivity extends AppCompatActivity {
         protected void onPostExecute(User result) {
             //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
             // Log.d("HttpTest", result);
-            displayUserInfo(result);
+
+
+            //проверка на возникновение ошибок и исключений
+
+            //успешный ответ
+            if (result != null) {
+                displayUserInfo(result);
+
+            }
+            //ошибка
+            else {
+                Toast.makeText(UserInfoActivity.this, R.string.loading_error_msg, Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -250,7 +263,15 @@ public class UserInfoActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Collection<Tweet> tweets) {
-            tweetAdapter.setItems(tweets);
+
+
+
+            if (tweets != null) {
+                tweetAdapter.setItems(tweets);
+            }
+            else {
+                   Toast.makeText(UserInfoActivity.this, R.string.loading_error_msg, Toast.LENGTH_SHORT).show();
+               }
         }
     }
 }
