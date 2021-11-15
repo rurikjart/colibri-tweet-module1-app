@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.Toolbar;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,10 +48,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
     //адаптер заполнения списка RecyclerView
     private TweetAdapter tweetAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private HttpClient httpClient;
 
     private Toolbar toolbar;
+    private int taskInProgressCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,16 @@ public class UserInfoActivity extends AppCompatActivity {
         followersCountTextView = findViewById(R.id.followers_count_text_view);
 
         initUserToolbar();
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tweetAdapter.clearItem();
+                loadUserInfo(userId);
+                loadTweets(userId);
+            }
+        });
 
         initRecyclerView();
 
@@ -132,6 +147,11 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         tweetsRecyclerView = findViewById(R.id.tweets_recycler_view);
+        // ограничение прокрутки только одним элементом
+        ViewCompat.setNestedScrollingEnabled(tweetsRecyclerView, false);
+        //ставим разделительную линию между твитами
+        tweetsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         tweetsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         tweetAdapter = new TweetAdapter();
         tweetsRecyclerView.setAdapter(tweetAdapter);
@@ -210,6 +230,11 @@ public class UserInfoActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class UserInfoAsyncTask extends AsyncTask<Long, Intent, User> {
 
+        @Override
+        protected void onPreExecute() {
+            setRefreshLayoutVisible(true);
+        }
+
         //отправляем на фоновое исполнение процесс
         protected User doInBackground(Long... ids) {
             try {
@@ -225,6 +250,7 @@ public class UserInfoActivity extends AppCompatActivity {
         protected void onPostExecute(User result) {
             //  Toast.makeText(UserInfoActivity.this, result, Toast.LENGTH_SHORT).show();
             // Log.d("HttpTest", result);
+            setRefreshLayoutVisible(false);
 
 
             //проверка на возникновение ошибок и исключений
@@ -246,6 +272,10 @@ public class UserInfoActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     private class TweetsAsyncTask extends AsyncTask<Long, Integer, Collection<Tweet>> {
 
+        @Override
+        protected void onPreExecute() {
+            setRefreshLayoutVisible(true);
+        }
 
         protected Collection<Tweet> doInBackground(Long... ids) {
 
@@ -264,6 +294,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         protected void onPostExecute(Collection<Tweet> tweets) {
 
+            setRefreshLayoutVisible(false);
 
 
             if (tweets != null) {
@@ -274,4 +305,14 @@ public class UserInfoActivity extends AppCompatActivity {
                }
         }
     }
+
+    private void setRefreshLayoutVisible(boolean visible) {
+        if(visible) {
+            taskInProgressCount++;
+            if (taskInProgressCount == 1) swipeRefreshLayout.setRefreshing(true);
+        } else {
+            taskInProgressCount--;
+            if(taskInProgressCount == 0) swipeRefreshLayout.setRefreshing(false);
+            }
+        }
 }

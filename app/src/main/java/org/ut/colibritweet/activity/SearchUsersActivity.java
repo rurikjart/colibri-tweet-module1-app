@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +38,8 @@ public class SearchUsersActivity extends AppCompatActivity {
     private Button searchButton;
 
     private HttpClient httpClient;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     // обрабатываем нажатие кнопки домой
     @Override
@@ -84,6 +88,16 @@ public class SearchUsersActivity extends AppCompatActivity {
             }
         });
 
+        //вытягиваем элемент свайп рефеш
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchUsers();
+            }
+        });
+
 
 
     }
@@ -103,6 +117,8 @@ public class SearchUsersActivity extends AppCompatActivity {
     private void initRecyclerView() {
         usersRecyclerView = findViewById(R.id.users_recycler_view);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        usersRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         UsersAdapter.OnUserClickListener onUserClickListener = new UsersAdapter.OnUserClickListener() {
             @Override
@@ -132,6 +148,12 @@ public class SearchUsersActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private class UsersAsyncTask extends AsyncTask<String, Integer, Collection<User>> {
+
+        @Override
+        protected void onPreExecute() {
+            swipeRefreshLayout.setRefreshing(true); // так как обновление и выполнение в этом модуле одно
+        }
+
         @Override
         protected Collection<User> doInBackground(String... params) {
             String query = params[0];
@@ -144,6 +166,9 @@ public class SearchUsersActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Collection<User> users) {
+
+            swipeRefreshLayout.setRefreshing(false);
+
             //успешный ответ
             if (users != null) {
                 usersAdapter.clearItems();
