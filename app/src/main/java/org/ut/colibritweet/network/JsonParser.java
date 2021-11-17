@@ -1,33 +1,40 @@
 package org.ut.colibritweet.network;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ut.colibritweet.pojo.Tweet;
 import org.ut.colibritweet.pojo.User;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class JsonParser {
 
-    public Collection<User> getUsers(String response) throws JSONException {
-        JSONArray jsonArray = new JSONArray(response);
-        Collection<User> usersResult = new ArrayList<>();
 
-        for(int i = 0; i < jsonArray.length(); i++) {
+    private static final Gson GSON = new Gson();
+
+    public Collection<User> getUsers(String response) /*throws JSONException */{
+       // JSONArray jsonArray = new JSONArray(response);
+      //  Collection<User> usersResult = new ArrayList<>();
+
+        /*for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject userJson = jsonArray.getJSONObject(i);
             User user = getUser(userJson);
             usersResult.add(user);
-        }
-
-        return usersResult;
-
+        } */
+        Type usersType = new TypeToken<Collection<User>>(){}.getType();
+        return GSON.fromJson(response, usersType);
     }
 
-    public User getUser(String response) throws JSONException {
-        JSONObject userJson = new JSONObject(response);
-        return getUser(userJson);
+    public User getUser(String response) /* throws JSONException */ {
+      /*  JSONObject userJson = new JSONObject(response);
+        return getUser(userJson);*/
+        return GSON.fromJson(response, User.class);
     }
 
     private User getUser(JSONObject userJson) throws JSONException {
