@@ -120,30 +120,30 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
 
-/*    private void loadTweets() {
+    private void loadTweets() {
         Collection<Tweet> tweets = getTweets();
 
         tweetAdapter.setItems(tweets);
-    }*/
+    }
 
     private void loadTweets(long userId) {
         new TweetsAsyncTask().execute(userId);
     }
 
-  /*  private Collection<Tweet> getTweets() {
+    private Collection<Tweet> getTweets() {
 
         return Arrays.asList(
                 new Tweet(getUser(), 1L, "Thu Dec 13 07:31:08 +0000 2017", "Очень длинное описание твита 1",
-                        4L, 4L,getEntities(),"https://www.w3schools.com/w3css/img_fjords.jpg"),
+                        4L, 4L, "https://www.w3schools.com/w3css/img_fjords.jpg"),
 
                 new Tweet(getUser(), 2L, "Thu Dec 12 07:31:08 +0000 2017", "Очень длинное описание твита 2",
-                        5L, 5L,"1","https://www.w3schools.com/w3images/lights.jpg"),
+                        5L, 5L, "https://www.w3schools.com/w3images/lights.jpg"),
 
                 new Tweet(getUser(), 3L, "Thu Dec 11 07:31:08 +0000 2017", "Очень длинное описание твита 3",
-                        6L, 6L,"1","https://www.w3schools.com/css/img_mountains.jpg")
+                        6L, 6L, "https://www.w3schools.com/css/img_mountains.jpg")
         );
 
-    }*/
+    }
 
     private void initRecyclerView() {
         tweetsRecyclerView = findViewById(R.id.tweets_recycler_view);

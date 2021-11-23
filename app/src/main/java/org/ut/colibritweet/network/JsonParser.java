@@ -50,8 +50,8 @@ public class JsonParser {
         return new User(id, imageUrl, name, nick, description, location, followingCount, followersCount);
     }
 
-    public Collection<Tweet> getTweets(String response) /* throws JSONException*/ {
-      /*  JSONArray jsonArray = new JSONArray(response);
+    public Collection<Tweet> getTweets(String response) throws JSONException {
+        JSONArray jsonArray = new JSONArray(response);
         Collection<Tweet> tweetsResult = new ArrayList<>();
 
         for(int i = 0; i < jsonArray.length(); i++) {
@@ -67,15 +67,11 @@ public class JsonParser {
             JSONObject userJson = tweetJson.getJSONObject("user");
             User user = getUser(userJson);
 
-            Tweet tweet = new Tweet(user, id, creationDate, fullText, retweetCount, likesCount, en, imageUrl);
+            Tweet tweet = new Tweet(user, id, creationDate, fullText, retweetCount, likesCount, imageUrl);
             tweetsResult.add(tweet);
         }
 
-        return tweetsResult;*/
-
-        Type tweetType = new TypeToken<Collection<Tweet>>(){}.getType();
-        return GSON.fromJson(response, tweetType);
-
+        return tweetsResult;
     }
 
     private String getTweetImageUrl(JSONObject tweetJson) throws JSONException {
@@ -84,5 +80,4 @@ public class JsonParser {
         JSONObject firstMedia = mediaArray != null ? mediaArray.getJSONObject(0) : null;
         return firstMedia != null ?  firstMedia.getString("media_url") : null;
     }
-
 }
