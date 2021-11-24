@@ -182,31 +182,7 @@ public class SearchUsersActivity extends AppCompatActivity {
         }
     }
 
-    private Collection<User> getUsers() {
-        return Arrays.asList(
-                new User(
-                        929257819349700608L,
-                        "http://i.imgur.com/DvpvklR.png",
-                        "DevColibri",
-                        "@devcolibri",
-                        "Sample description",
-                        "USA",
-                        42,
-                        42
-                ),
 
-                new User(
-                        44196397L,
-                        "https://pbs.twimg.com/profile_images/782474226020200448/zDo-gAo0_400x400.jpg",
-                        "Elon Musk",
-                        "@elonmusk",
-                        "Hat Salesman",
-                        "Boring",
-                        14,
-                        13
-                )
-        );
-    }
 
 
 }

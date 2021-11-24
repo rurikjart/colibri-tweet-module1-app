@@ -11,6 +11,7 @@ import org.ut.colibritweet.pojo.User;
 
 import java.lang.reflect.Type;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class JsonParser {
