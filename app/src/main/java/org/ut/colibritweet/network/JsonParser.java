@@ -10,7 +10,7 @@ import org.ut.colibritweet.pojo.Tweet;
 import org.ut.colibritweet.pojo.User;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+
 import java.util.Collection;
 
 public class JsonParser {
@@ -20,7 +20,7 @@ public class JsonParser {
 
     public Collection<User> getUsers(String response) /*throws JSONException */{
        // JSONArray jsonArray = new JSONArray(response);
-      //  Collection<User> usersResult = new ArrayList<>();
+       //  Collection<User> usersResult = new ArrayList<>();
 
         /*for(int i = 0; i < jsonArray.length(); i++) {
             JSONObject userJson = jsonArray.getJSONObject(i);
