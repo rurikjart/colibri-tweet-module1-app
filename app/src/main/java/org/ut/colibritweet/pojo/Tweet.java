@@ -1,5 +1,7 @@
 package org.ut.colibritweet.pojo;
 
+
+
 public class Tweet {
     private User user;
     private Long id;
@@ -8,7 +10,6 @@ public class Tweet {
     private Long retweetCount;
     private Long favouriteCount;
     private String imageUrl;
-
 
     public Tweet(User user, Long id, String creationDate, String text,
                  Long retweetCount, Long favouriteCount, String imageUrl) {
