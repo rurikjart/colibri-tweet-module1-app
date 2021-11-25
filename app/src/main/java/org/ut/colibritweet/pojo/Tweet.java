@@ -1,26 +1,22 @@
 package org.ut.colibritweet.pojo;
 
 
+import com.google.gson.annotations.SerializedName;
 
 public class Tweet {
-    private User user;
-    private Long id;
-    private String creationDate;
-    private String text;
-    private Long retweetCount;
-    private Long favouriteCount;
+    @SerializedName("user") private User user;
+    @SerializedName("id") private Long id;
+    @SerializedName("created_at") private String creationDate;
+    @SerializedName("full_text") private String text;
+    @SerializedName("retweet_count") private Long retweetCount;
+    @SerializedName("favorite_count") private Long favouriteCount;
     private String imageUrl;
 
-    public Tweet(User user, Long id, String creationDate, String text,
-                 Long retweetCount, Long favouriteCount, String imageUrl) {
-        this.user = user;
-        this.id = id;
-        this.creationDate = creationDate;
-        this.text = text;
-        this.retweetCount = retweetCount;
-        this.favouriteCount = favouriteCount;
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+   // удаляем конструктор он не вызывается неявно библиотекой гсон, и явная реализация нам не нужна
 
     public User getUser() {
         return user;
